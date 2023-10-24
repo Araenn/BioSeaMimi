@@ -44,8 +44,6 @@ class MyAppState extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-
 }
 
 class MyHomePage extends StatefulWidget {
@@ -80,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   extended: constraints.maxWidth >= 600,
                   destinations: [
                     NavigationRailDestination(
-                      icon: Icon(Icons.home),
+                      icon: Icon(Icons.access_alarm),
                       label: Text('Home'),
                     ),
                     NavigationRailDestination(
@@ -252,6 +250,25 @@ class MapScreen extends StatelessWidget {
                   'accessToken': AppConstants.mapBoxAccessToken,
                 },
               ),
+              MarkerLayer(
+                markers: [
+                  for (int i = 0; i < mapMarkers.length; i++)
+                    Marker(
+                      height: 100,
+                      width: 100,
+                      point: mapMarkers[i].location ?? AppConstants.myLocation,
+                      builder: (_) {
+                        return GestureDetector(
+                          onTap: () {},
+                          child: Image.asset(
+                              'bird.png',
+                            ),
+                        );
+                      },
+                    ),
+                ],
+              ),
+              
             ],
           ),
         ],
@@ -259,3 +276,23 @@ class MapScreen extends StatelessWidget {
     );
   }
 }
+
+class MapMarker {
+  final String? image;
+  final String? title;
+  final latLng.LatLng? location;
+
+  MapMarker({
+    required this.image,
+    required this.title,
+    required this.location,
+  });
+}
+
+final mapMarkers = [
+  MapMarker(
+      image: 'assets/bird.png',
+      title: 'Bird',
+      location: latLng.LatLng(51.5090214, -0.1982948)
+      )
+];
