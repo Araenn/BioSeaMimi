@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latLng;
+import 'dart:async';
 
 void main() {
   runApp(MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'Namer App',
+        title: 'BioSeaMimi',
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
@@ -216,15 +217,35 @@ class FavoritesPage extends StatelessWidget {
   }
 }
 
+
 class AppConstants {
-  static const String mapBoxAccessToken = 'pk.eyJ1IjoiYXJhZW5uIiwiYSI6ImNsbnJwaDBjZjB6em4ycW56NHloNGY3MDUifQ.pbg-ntcCudg9voG_25uCIA';
+  static const String mapBoxAccessToken =
+      'pk.eyJ1IjoiYXJhZW5uIiwiYSI6ImNsbnJwaDBjZjB6em4ycW56NHloNGY3MDUifQ.pbg-ntcCudg9voG_25uCIA';
 
   static const String mapBoxStyleId = 'clnrpjn3300ge01pg1hrtcuie';
 
   static final myLocation = latLng.LatLng(51.5090214, -0.1982948);
 }
 
-class MapScreen extends StatelessWidget {
+class MapScreen extends StatefulWidget {
+  @override
+  _MapScreenState createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  MapController mapController = MapController();
+  int selectedMarkerIndex = -1;
+  Timer? _highlightTimer;
+
+  void _handleMarkerTap(int markerIndex) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => InfoPage(title: mapMarkers[markerIndex].title ?? ""),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -235,6 +256,7 @@ class MapScreen extends StatelessWidget {
       body: Stack(
         children: [
           FlutterMap(
+            mapController: mapController,
             options: MapOptions(
               minZoom: 1.5,
               maxZoom: 10,
@@ -253,34 +275,67 @@ class MapScreen extends StatelessWidget {
               MarkerLayer(
                 markers: [
                   for (int i = 0; i < mapMarkers.length; i++)
+                    
                     Marker(
                       height: 100,
                       width: 100,
                       point: mapMarkers[i].location ?? AppConstants.myLocation,
                       builder: (_) {
                         return GestureDetector(
-                          onTap: () {},
-                          child: Image.asset(
-                              'bird.png',
+                          onTap: () {
+                            setState(() {
+                              selectedMarkerIndex = i;
+                              _startHighlightTimer();
+                              _handleMarkerTap(i);
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: selectedMarkerIndex == i
+                                    ? Colors.black
+                                    : Colors.transparent,
+                                width: 2.0,
+                              ),
                             ),
+                            child: Image.asset(mapMarkers[i].image.toString().split('assets/').last),
+                          ),
                         );
                       },
                     ),
                 ],
               ),
-              
             ],
           ),
         ],
       ),
     );
   }
+  
+  void _startHighlightTimer() {
+    // Cancel the previous timer if it exists
+    _highlightTimer?.cancel();
+
+    // Start a new timer to reset selectedMarkerIndex after a delay
+    _highlightTimer = Timer(Duration(milliseconds: 120), () {
+      setState(() {
+        selectedMarkerIndex = -1; // Reset to normal state
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // Cancel the timer to avoid memory leaks
+    _highlightTimer?.cancel();
+    super.dispose();
+  }
 }
 
 class MapMarker {
   final String? image;
   final String? title;
-  final latLng.LatLng? location;
+  final latLng.LatLng? location; // Change to latLng.LatLng
 
   MapMarker({
     required this.image,
@@ -289,10 +344,50 @@ class MapMarker {
   });
 }
 
+
 final mapMarkers = [
   MapMarker(
-      image: 'assets/bird.png',
-      title: 'Bird',
-      location: latLng.LatLng(51.5090214, -0.1982948)
-      )
+    image: 'assets/images/bird.png',
+    title: 'Bird',
+    location: latLng.LatLng(20.5090214, -0.1982948),
+  ),
+  MapMarker(
+    image: 'assets/images/lotus.jpg',
+    title: 'Lotus',
+    location: latLng.LatLng(50, -0.1982948),
+  ),
 ];
+
+class InfoPage extends StatelessWidget {
+  final String title;
+
+  InfoPage({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Information about $title:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Add your detailed information here...',
+              style: TextStyle(fontSize: 16),
+            ),
+            // You can add more Text widgets or other widgets to customize the content
+          ],
+        ),
+      ),
+    );
+  }
+}
+
