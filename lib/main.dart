@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latLng;
+import 'dart:io';
 import 'dart:async';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 
@@ -238,13 +239,22 @@ class _MapScreenState extends State<MapScreen> {
   Timer? _highlightTimer;
 
   void _handleMarkerTap(int markerIndex) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => InfoPage(title: mapMarkers[markerIndex].title ?? ""),
+  String descriptionFilePath = mapMarkers[markerIndex].description!;
+  String descriptionContent = readDescriptionsFromFileSync(descriptionFilePath);
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => InfoPage(
+        title: mapMarkers[markerIndex].title.toString(),
+        imagePath: mapMarkers[markerIndex].description_image.toString().split('assets/').last,
+        description: descriptionContent,
       ),
-    );
-  }
+    ),
+  );
+}
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -298,7 +308,7 @@ class _MapScreenState extends State<MapScreen> {
                                 width: 2.0,
                               ),
                             ),
-                            child: Image.asset(mapMarkers[i].image.toString().split('assets/').last),
+                            child: Image.asset(mapMarkers[i].marker_image.toString().split('assets/').last),
                           ),
                         );
                       },
@@ -333,13 +343,17 @@ class _MapScreenState extends State<MapScreen> {
 }
 
 class MapMarker {
-  final String? image;
+  final String? marker_image;
+  final String? description_image;
   final String? title;
+  final String? description;
   final latLng.LatLng? location; // Change to latLng.LatLng
 
   MapMarker({
-    required this.image,
+    required this.marker_image,
+    required this.description_image,
     required this.title,
+    required this.description,
     required this.location,
   });
 }
@@ -347,21 +361,40 @@ class MapMarker {
 
 final mapMarkers = [
   MapMarker(
-    image: 'assets/images/bird.png',
+    marker_image: 'assets/images/markers_img/bird.png',
+    description_image: 'assets/images/description/bird.png',
     title: 'Bird',
+    description: 'descriptions/Lotus.txt',
     location: latLng.LatLng(20.5090214, -0.1982948),
   ),
   MapMarker(
-    image: 'assets/images/lotus.jpg',
+    marker_image: 'assets/images/markers_img/lotus.jpg',
+    description_image: 'assets/images/description/lotus.jpg',
     title: 'Lotus',
-    location: latLng.LatLng(50, -0.1982948),
+    description: 'descriptions/Lotus.txt',
+    location: latLng.LatLng(50, 100),
+  ),
+  MapMarker(
+    marker_image: 'assets/images/markers_img/Whale.png',
+    description_image: 'assets/images/description/Whale.png',
+    title: 'Whale',
+    description: 'descriptions/Whales.txt',
+    location: latLng.LatLng(50, 40),
   ),
 ];
 
+String readDescriptionsFromFileSync(String filePath) {
+  File file = File(filePath);
+  return file.existsSync() ? file.readAsStringSync() : "";
+}
+
+
 class InfoPage extends StatelessWidget {
   final String title;
+  final String imagePath;
+  final String description;
 
-  InfoPage({required this.title});
+  InfoPage({required this.title, required this.imagePath, required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -372,22 +405,29 @@ class InfoPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Container(
+              width: double.infinity,
+              height: 200,
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(height: 20),
             Text(
-              'Information about $title:',
+              'Description for $title:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
             Text(
-              'Add your detailed information here...',
+              description,
               style: TextStyle(fontSize: 16),
             ),
-            // You can add more Text widgets or other widgets to customize the content
           ],
         ),
       ),
     );
   }
 }
-
