@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+// ignore: library_prefixes
 import 'package:latlong2/latlong.dart' as latLng;
 import 'dart:io';
 import 'dart:async';
@@ -58,12 +59,12 @@ class IntroductionPage extends StatelessWidget {
                     ),
                   );
                 },
-                child: Text('Go see the map !'),
                 style: ElevatedButton.styleFrom(
-                  primary: Color.fromARGB(255, 164, 202, 233),
+                  backgroundColor: Color.fromARGB(255, 164, 202, 233),
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   textStyle: TextStyle(fontSize: 18),
                 ),
+                child: Text('Go see the map !'),
               ),
               SizedBox(height: 100),
               Text(
@@ -82,7 +83,7 @@ class IntroductionPage extends StatelessWidget {
 
 class AppConstants {
   static const String mapBoxAccessToken =
-      'pk.eyJ1IjoiYXJhZW5uIiwiYSI6ImNsbnJwaDBjZjB6em4ycW56NHloNGY3MDUifQ.pbg-ntcCudg9voG_25uCIA';
+      'pk.eyJ1IjoiYXJhZW5uIiwiYSI6ImNsb3hibGUwYzA0MHoya3A4ZTVrM3piMHQifQ.60VGzZQuf9pLA1Hc3iRpdg';
 
   static const String mapBoxStyleId = 'clnrpjn3300ge01pg1hrtcuie';
 
@@ -101,109 +102,104 @@ class _MapScreenState extends State<MapScreen> {
   Timer? _highlightTimer;
 
   void _handleMarkerTap(int markerIndex) {
-  String descriptionFilePath = mapMarkers[markerIndex].description!;
-  BuildContext currentContext = context; // Capturer le contexte actuel
+    String descriptionFilePath = mapMarkers[markerIndex].description!;
+    BuildContext currentContext = context;
 
-  loadDescription(descriptionFilePath).then((descriptionContent) {
-    Navigator.push(
-      currentContext, // Utiliser le contexte capturé
-      MaterialPageRoute(
-        builder: (context) => InfoPage(
-          title: mapMarkers[markerIndex].title.toString(),
-          imagePath: mapMarkers[markerIndex].descriptionImage.toString().split('assets/').last,
-          description: descriptionContent,
-          infopagesImage: mapMarkers[markerIndex].infopagesImage.toString().split('assets/').last,
-          backgroundOpacity: mapMarkers[markerIndex].backgroundOpacity!.toDouble(),
+    loadDescription(descriptionFilePath).then((descriptionContent) {
+      Navigator.push(
+        currentContext,
+        MaterialPageRoute(
+          builder: (context) => InfoPage(
+            title: mapMarkers[markerIndex].title.toString(),
+            imagePath: mapMarkers[markerIndex].descriptionImage.toString().split('assets/').last,
+            description: descriptionContent,
+            infopagesImage: mapMarkers[markerIndex].infopagesImage.toString().split('assets/').last,
+            backgroundOpacity: mapMarkers[markerIndex].backgroundOpacity!.toDouble(),
+          ),
+        ),
+      );
+    });
+  }
+
+  @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: Color.fromARGB(255, 15, 127, 192),
+      title: const Text('World Map'),
+    ),
+    body: FlutterMap(
+      mapController: mapController,
+      options: MapOptions(
+        minZoom: 2,
+        maxZoom: 10,
+        initialZoom: 2,
+        initialCenter: AppConstants.myLocation,
+        maxBounds: LatLngBounds(
+          latLng.LatLng(-85.0, -180.0),
+          latLng.LatLng(85.0, 180.0),
         ),
       ),
-    );
-  });
+      children: [
+        TileLayer(
+          urlTemplate:
+              "https://api.mapbox.com/styles/v1/araenn/clnrpjn3300ge01pg1hrtcuie/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYXJhZW5uIiwiYSI6ImNsb3hibGUwYzA0MHoya3A4ZTVrM3piMHQifQ.60VGzZQuf9pLA1Hc3iRpdg",
+          additionalOptions: {
+            'mapStyleId': AppConstants.mapBoxStyleId,
+            'accessToken': AppConstants.mapBoxAccessToken,
+          },
+        ),
+        MarkerLayer(
+          markers: [
+            for (int i = 0; i < mapMarkers.length; i++)
+              Marker(
+                height: 100,
+                width: 100,
+                point: mapMarkers[i].location ?? AppConstants.myLocation,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedMarkerIndex = i;
+                      _startHighlightTimer();
+                      _handleMarkerTap(i);
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: selectedMarkerIndex == i
+                            ? Colors.black
+                            : Colors.transparent,
+                        width: 2.0,
+                      ),
+                    ),
+                    child: Image.asset(
+                      mapMarkers[i].markerImage.toString().split('assets/').last,
+                      width: 100,
+                      height: 100,
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
+    ),
+  );
 }
 
 
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 15, 127, 192),
-        title: const Text('Flutter MapBox'),
-      ),
-      body: Stack(
-        children: [
-          FlutterMap(
-            mapController: mapController,
-            options: MapOptions(
-              minZoom: 1.5,
-              maxZoom: 10,
-              zoom: 1.5,
-              center: AppConstants.myLocation,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate:
-                    "https://api.mapbox.com/styles/v1/araenn/clnrpjn3300ge01pg1hrtcuie/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiYXJhZW5uIiwiYSI6ImNsbnJwaDBjZjB6em4ycW56NHloNGY3MDUifQ.pbg-ntcCudg9voG_25uCIA",
-                additionalOptions: {
-                  'mapStyleId': AppConstants.mapBoxStyleId,
-                  'accessToken': AppConstants.mapBoxAccessToken,
-                },
-              ),
-              MarkerLayer(
-                markers: [
-                  for (int i = 0; i < mapMarkers.length; i++)
-                    
-                    Marker(
-                      height: 100,
-                      width: 100,
-                      point: mapMarkers[i].location ?? AppConstants.myLocation,
-                      builder: (_) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedMarkerIndex = i;
-                              _startHighlightTimer();
-                              _handleMarkerTap(i);
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: selectedMarkerIndex == i
-                                    ? Colors.black
-                                    : Colors.transparent,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: Image.asset(mapMarkers[i].markerImage.toString().split('assets/').last),
-                          ),
-                        );
-                      },
-                    ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-  
   void _startHighlightTimer() {
-    // Cancel the previous timer if it exists
     _highlightTimer?.cancel();
-
-    // Start a new timer to reset selectedMarkerIndex after a delay
     _highlightTimer = Timer(Duration(milliseconds: 120), () {
       setState(() {
-        selectedMarkerIndex = -1; // Reset to normal state
+        selectedMarkerIndex = -1;
       });
     });
   }
 
   @override
   void dispose() {
-    // Cancel the timer to avoid memory leaks
     _highlightTimer?.cancel();
     super.dispose();
   }
