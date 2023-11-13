@@ -31,4 +31,5 @@ flutter:
       - map_style.json
       - images/description/
       - images/markers_img/
+      - images/introduction/
       - descriptions/

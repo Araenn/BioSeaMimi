@@ -1,222 +1,83 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latLng;
 import 'dart:io';
 import 'dart:async';
+import 'package:flutter/services.dart';
 
 void main() async {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'BioSeaMimi',
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        ),
-        home: MyHomePage(),
+    return MaterialApp(
+      title: 'BioSeaMimi',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
+      home: IntroductionPage(),
     );
   }
 }
 
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
-  void getNext() {
-    current = WordPair.random();
-    notifyListeners();
-  }
-
-  var favorites = <WordPair>[];
-
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
-    } else {
-      favorites.add(current);
-    }
-    notifyListeners();
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  var selectedIndex = 0;
-
+class IntroductionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Widget page;
-    switch (selectedIndex) {
-      case 0:
-        page = GeneratorPage();
-        break;
-      case 1:
-        page = FavoritesPage();
-        break;
-      default:
-        throw UnimplementedError('no widget for $selectedIndex');
-    }
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Scaffold(
-          body: Row(
-            children: [
-              SafeArea(
-                child: NavigationRail(
-                  extended: constraints.maxWidth >= 600,
-                  destinations: [
-                    NavigationRailDestination(
-                      icon: Icon(Icons.access_alarm),
-                      label: Text('Home'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.favorite),
-                      label: Text('Favorites'),
-                    ),
-                  ],
-                  selectedIndex: selectedIndex,
-                  onDestinationSelected: (value) {
-                    setState(() {
-                      selectedIndex = value;
-                    });
-                  },
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  child: page,  // ← Here.
-                ),
-              ),
-            ],
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/introduction/ocean_background.jpg'),
+            fit: BoxFit.cover,
           ),
-        );
-      }
-    );
-  }
-}
-
-
-class GeneratorPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    var pair = appState.current;
-
-    IconData icon;
-    if (appState.favorites.contains(pair)) {
-      icon = Icons.favorite;
-    } else {
-      icon = Icons.favorite_border;
-    }
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          BigCard(pair: pair),
-          SizedBox(height: 10),
-          Row(
-            mainAxisSize: MainAxisSize.min,
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  appState.toggleFavorite();
-                },
-                icon: Icon(icon),
-                label: Text('Like'),
+              Image.asset(
+                'assets/images/logo.png',
+                width: 100,
+                height: 100,
               ),
-              SizedBox(width: 10),
+              SizedBox(height: 20),
+              Text(
+                'Welcome to BioSeaMimi',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  appState.getNext();
-                },
-                child: Text('Next'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
+                  Navigator.push(
+                    context,
                     MaterialPageRoute(
                       builder: (context) => MapScreen(),
                     ),
                   );
                 },
-                child: Text('Voir la carte'),
+                child: Text('Go see the map !'),
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(255, 164, 202, 233),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  textStyle: TextStyle(fontSize: 18),
+                ),
+              ),
+              SizedBox(height: 100),
+              Text(
+                'Developped by : \n YEROMONAHOS Léa & PONCET Charline \n\nResearches made by : \n SERRALHEIRO Anthéa & SOULARD Florian \n MASINSKI Yann\n\nSupported by : DISSARD Anne-Marie (<3)' ,
+                style: TextStyle(fontSize: 14, color: Colors.white),
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class BigCard extends StatelessWidget {
-  const BigCard({
-    super.key,
-    required this.pair,
-  });
-
-  final WordPair pair;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-
-    return Card(
-      color: theme.colorScheme.primary,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Text(pair.asLowerCase, style: style),
-      ),
-    );
-  }
-}
-
-class FavoritesPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
-    if (appState.favorites.isEmpty) {
-      return Center(
-        child: Text('No favorites yet.'),
-      );
-    }
-
-    return ListView(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Text('You have '
-              '${appState.favorites.length} favorites:'),
         ),
-        for (var pair in appState.favorites)
-          ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text(pair.asLowerCase),
-          ),
-      ],
+      ),
     );
   }
 }
+
 
 
 class AppConstants {
@@ -230,6 +91,7 @@ class AppConstants {
 
 class MapScreen extends StatefulWidget {
   @override
+  // ignore: library_private_types_in_public_api
   _MapScreenState createState() => _MapScreenState();
 }
 
@@ -240,19 +102,22 @@ class _MapScreenState extends State<MapScreen> {
 
   void _handleMarkerTap(int markerIndex) {
   String descriptionFilePath = mapMarkers[markerIndex].description!;
-  String descriptionContent = readDescriptionsFromFileSync(descriptionFilePath);
+  BuildContext currentContext = context; // Capturer le contexte actuel
 
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => InfoPage(
-        title: mapMarkers[markerIndex].title.toString(),
-        imagePath: mapMarkers[markerIndex].description_image.toString().split('assets/').last,
-        description: descriptionContent,
+  loadDescription(descriptionFilePath).then((descriptionContent) {
+    Navigator.push(
+      currentContext, // Utiliser le contexte capturé
+      MaterialPageRoute(
+        builder: (context) => InfoPage(
+          title: mapMarkers[markerIndex].title.toString(),
+          imagePath: mapMarkers[markerIndex].descriptionImage.toString().split('assets/').last,
+          description: descriptionContent,
+        ),
       ),
-    ),
-  );
+    );
+  });
 }
+
 
 
 
@@ -308,7 +173,7 @@ class _MapScreenState extends State<MapScreen> {
                                 width: 2.0,
                               ),
                             ),
-                            child: Image.asset(mapMarkers[i].marker_image.toString().split('assets/').last),
+                            child: Image.asset(mapMarkers[i].markerImage.toString().split('assets/').last),
                           ),
                         );
                       },
@@ -343,15 +208,15 @@ class _MapScreenState extends State<MapScreen> {
 }
 
 class MapMarker {
-  final String? marker_image;
-  final String? description_image;
+  final String? markerImage;
+  final String? descriptionImage;
   final String? title;
   final String? description;
   final latLng.LatLng? location; // Change to latLng.LatLng
 
   MapMarker({
-    required this.marker_image,
-    required this.description_image,
+    required this.markerImage,
+    required this.descriptionImage,
     required this.title,
     required this.description,
     required this.location,
@@ -361,22 +226,22 @@ class MapMarker {
 
 final mapMarkers = [
   MapMarker(
-    marker_image: 'assets/images/markers_img/bird.png',
-    description_image: 'assets/images/description/bird.png',
+    markerImage: 'assets/images/markers_img/bird.png',
+    descriptionImage: 'assets/images/description/bird.png',
     title: 'Bird',
     description: 'descriptions/Lotus.txt',
     location: latLng.LatLng(20.5090214, -0.1982948),
   ),
   MapMarker(
-    marker_image: 'assets/images/markers_img/lotus.jpg',
-    description_image: 'assets/images/description/lotus.jpg',
+    markerImage: 'assets/images/markers_img/lotus.jpg',
+    descriptionImage: 'assets/images/description/lotus.jpg',
     title: 'Lotus',
     description: 'descriptions/Lotus.txt',
     location: latLng.LatLng(50, 100),
   ),
   MapMarker(
-    marker_image: 'assets/images/markers_img/Whale.png',
-    description_image: 'assets/images/description/Whale.png',
+    markerImage: 'assets/images/markers_img/Whale.png',
+    descriptionImage: 'assets/images/description/Whale.png',
     title: 'Whale',
     description: 'descriptions/Whales.txt',
     location: latLng.LatLng(50, 40),
@@ -385,10 +250,12 @@ final mapMarkers = [
 
 String readDescriptionsFromFileSync(String filePath) {
   File file = File(filePath);
-  return file.existsSync() ? file.readAsStringSync() : "";
+  return file.existsSync() ? file.readAsStringSync() : "blabla";
 }
 
-
+Future<String> loadDescription(String path) async {
+  return await rootBundle.loadString(path);
+}
 class InfoPage extends StatelessWidget {
   final String title;
   final String imagePath;
@@ -407,7 +274,7 @@ class InfoPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               width: double.infinity,
               height: 200,
               child: Image.asset(
