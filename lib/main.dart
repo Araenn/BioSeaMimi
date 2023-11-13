@@ -112,6 +112,8 @@ class _MapScreenState extends State<MapScreen> {
           title: mapMarkers[markerIndex].title.toString(),
           imagePath: mapMarkers[markerIndex].descriptionImage.toString().split('assets/').last,
           description: descriptionContent,
+          infopagesImage: mapMarkers[markerIndex].infopagesImage.toString().split('assets/').last,
+          backgroundOpacity: mapMarkers[markerIndex].backgroundOpacity!.toDouble(),
         ),
       ),
     );
@@ -212,14 +214,18 @@ class MapMarker {
   final String? descriptionImage;
   final String? title;
   final String? description;
-  final latLng.LatLng? location; // Change to latLng.LatLng
+  final String? infopagesImage;
+  final latLng.LatLng? location;
+  final double? backgroundOpacity;
 
   MapMarker({
     required this.markerImage,
     required this.descriptionImage,
     required this.title,
     required this.description,
+    required this.infopagesImage,
     required this.location,
+    this.backgroundOpacity
   });
 }
 
@@ -230,21 +236,27 @@ final mapMarkers = [
     descriptionImage: 'assets/images/description/bird.png',
     title: 'Bird',
     description: 'descriptions/Lotus.txt',
+    infopagesImage: 'assets/images/infopages/lotus.jpg',
     location: latLng.LatLng(20.5090214, -0.1982948),
+    backgroundOpacity: 0.5,
   ),
   MapMarker(
     markerImage: 'assets/images/markers_img/lotus.jpg',
     descriptionImage: 'assets/images/description/lotus.jpg',
     title: 'Lotus',
     description: 'descriptions/Lotus.txt',
+    infopagesImage: 'assets/images/infopages/lotus.jpg',
     location: latLng.LatLng(50, 100),
+    backgroundOpacity: 0.5,
   ),
   MapMarker(
     markerImage: 'assets/images/markers_img/Whale.png',
     descriptionImage: 'assets/images/description/Whale.png',
     title: 'Whale',
     description: 'descriptions/Whales.txt',
+    infopagesImage: 'assets/images/infopages/whale.jpg',
     location: latLng.LatLng(50, 40),
+    backgroundOpacity: 0.5,
   ),
 ];
 
@@ -256,12 +268,19 @@ String readDescriptionsFromFileSync(String filePath) {
 Future<String> loadDescription(String path) async {
   return await rootBundle.loadString(path);
 }
+
 class InfoPage extends StatelessWidget {
   final String title;
   final String imagePath;
   final String description;
+  final String infopagesImage;
+  final double backgroundOpacity;
 
-  InfoPage({required this.title, required this.imagePath, required this.description});
+  InfoPage({required this.title, 
+  required this.imagePath, 
+  required this.description, 
+  required this.infopagesImage,
+  required this.backgroundOpacity});
 
   @override
   Widget build(BuildContext context) {
@@ -269,31 +288,76 @@ class InfoPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: 200,
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(infopagesImage),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(backgroundOpacity), // Appliquer l'opacité ici
+              BlendMode.dstATop,
+            ),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 300, // Définissez la largeur maximale souhaitée ici
+                height: 150, // Définissez la hauteur maximale souhaitée ici
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                    alignment: Alignment.center,
+                  ),
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Description for $title:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text(
-              description,
-              style: TextStyle(fontSize: 16),
-            ),
+              SizedBox(height: 20),
+              Text(
+                title,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Text(
+                    description,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+              ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => QuizPage()),
+                );
+              },
+              child: Text('Do you want to play ?'),
+          ),
           ],
         ),
+      ),
+    ),
+    );
+  }
+}
+
+class QuizPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Mini Quiz'),
+      ),
+      body: Center(
+        child: Text('Quiz Creation Page'),
       ),
     );
   }
