@@ -20,6 +20,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
       home: IntroductionPage(),
+      routes: {
+        '/map': (context) => MapScreen(),
+        '/introduction': (context) => IntroductionPage(),
+      },
     );
   }
 }
@@ -94,32 +98,41 @@ class MapScreen extends StatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
   _MapScreenState createState() => _MapScreenState();
+  
 }
 
 class _MapScreenState extends State<MapScreen> {
   MapController mapController = MapController();
   int selectedMarkerIndex = -1;
   Timer? _highlightTimer;
+  
+  void pop() {
+    Navigator.pop(context);
+  }
+  
 
   void _handleMarkerTap(int markerIndex) {
-    String descriptionFilePath = mapMarkers[markerIndex].description!;
-    BuildContext currentContext = context;
+  String descriptionFilePath = mapMarkers[markerIndex].description!;
+  BuildContext currentContext = context;
 
-    loadDescription(descriptionFilePath).then((descriptionContent) {
-      Navigator.push(
-        currentContext,
-        MaterialPageRoute(
-          builder: (context) => InfoPage(
-            title: mapMarkers[markerIndex].title.toString(),
-            imagePath: mapMarkers[markerIndex].descriptionImage.toString().split('assets/').last,
-            description: descriptionContent,
-            infopagesImage: mapMarkers[markerIndex].infopagesImage.toString().split('assets/').last,
-            backgroundOpacity: mapMarkers[markerIndex].backgroundOpacity!.toDouble(),
-          ),
+  loadDescription(descriptionFilePath).then((descriptionContent) {
+    Navigator.push(
+      currentContext,
+      MaterialPageRoute(
+        builder: (context) => QuizPage(
+          title: mapMarkers[markerIndex].title.toString(),
+          imagePath: mapMarkers[markerIndex].descriptionImage.toString().split('assets/').last,
+          description: descriptionContent,
+          infopagesImage: mapMarkers[markerIndex].infopagesImage.toString().split('assets/').last,
+          backgroundOpacity: mapMarkers[markerIndex].backgroundOpacity!.toDouble(),
+          quizQuestions: mapMarkers[markerIndex].quizQuestions,
+          
         ),
-      );
-    });
-  }
+      ),
+    );
+  });
+}
+
 
   @override
 Widget build(BuildContext context) {
@@ -140,6 +153,7 @@ Widget build(BuildContext context) {
           latLng.LatLng(85.0, 180.0),
         ),
       ),
+      
       children: [
         TileLayer(
           urlTemplate:
@@ -213,6 +227,7 @@ class MapMarker {
   final String? infopagesImage;
   final latLng.LatLng? location;
   final double? backgroundOpacity;
+  final List<Question> quizQuestions;
 
   MapMarker({
     required this.markerImage,
@@ -221,7 +236,8 @@ class MapMarker {
     required this.description,
     required this.infopagesImage,
     required this.location,
-    this.backgroundOpacity
+    this.backgroundOpacity,
+    required this.quizQuestions,
   });
 }
 
@@ -235,6 +251,13 @@ final mapMarkers = [
     infopagesImage: 'assets/images/infopages/lotus.jpg',
     location: latLng.LatLng(20.5090214, -0.1982948),
     backgroundOpacity: 0.5,
+    quizQuestions: [
+      Question(
+        questionText: 'Quelle est la capitale de la France ?',
+        options: ['Paris', 'Berlin', 'Londres', 'Rome'],
+        correctOptionIndex: 0,
+      ),
+    ],
   ),
   MapMarker(
     markerImage: 'assets/images/markers_img/lotus.jpg',
@@ -244,6 +267,13 @@ final mapMarkers = [
     infopagesImage: 'assets/images/infopages/lotus.jpg',
     location: latLng.LatLng(50, 100),
     backgroundOpacity: 0.5,
+    quizQuestions: [
+      Question(
+        questionText: 'Quelle est la capitale de la France ?',
+        options: ['Paris', 'Berlin', 'Londres', 'Rome'],
+        correctOptionIndex: 0,
+      ),
+    ],
   ),
   MapMarker(
     markerImage: 'assets/images/markers_img/Whale.png',
@@ -253,6 +283,13 @@ final mapMarkers = [
     infopagesImage: 'assets/images/infopages/whale.jpg',
     location: latLng.LatLng(50, 40),
     backgroundOpacity: 0.5,
+    quizQuestions: [
+      Question(
+        questionText: 'Quelle est la capitale de la France ?',
+        options: ['Paris', 'Berlin', 'Londres', 'Rome'],
+        correctOptionIndex: 0,
+      ),
+    ],
   ),
 ];
 
@@ -329,14 +366,15 @@ class InfoPage extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => QuizPage()),
-                );
-              },
-              child: Text('Do you want to play ?'),
-          ),
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/map', // Le nom de la route pour la carte
+      ModalRoute.withName('/map'), // La condition pour retirer toutes les routes jusqu'à '/map'
+    );
+                },
+                child: Text('Back to the map'),
+              ),
           ],
         ),
       ),
@@ -345,16 +383,173 @@ class InfoPage extends StatelessWidget {
   }
 }
 
-class QuizPage extends StatelessWidget {
+class QuizPage extends StatefulWidget {
+  final String title;
+  final String imagePath;
+  final String description;
+  final String infopagesImage;
+  final double backgroundOpacity;
+  final List<Question> quizQuestions;
+
+  QuizPage({
+    required this.title,
+    required this.imagePath,
+    required this.description,
+    required this.infopagesImage,
+    required this.backgroundOpacity,
+    required this.quizQuestions,
+  });
+
+  @override
+  _QuizPageState createState() => _QuizPageState();
+}
+
+class _QuizPageState extends State<QuizPage> {
+  int currentQuestionIndex = 0;
+  int correctAnswers = 0;
+  int _selectedOptionIndex = -1;
+  bool showSeeDetailsButton = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mini Quiz'),
+        title: Text('Mini Quiz - ${widget.title}'),
       ),
       body: Center(
-        child: Text('Quiz Creation Page'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            QuestionWidget(
+              question: widget.quizQuestions[currentQuestionIndex],
+              selectedOptionIndex: _selectedOptionIndex,
+              onOptionSelected: (selectedOptionIndex) {
+                setState(() {
+                  _selectedOptionIndex = selectedOptionIndex;
+                });
+              },
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Logic to handle the answer
+                _handleAnswer(_selectedOptionIndex);
+              },
+              child: Text('Submit Answer'),
+            ),
+            
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _handleAnswer(int selectedOptionIndex) {
+    Question currentQuestion = widget.quizQuestions[currentQuestionIndex];
+
+    if (selectedOptionIndex == currentQuestion.correctOptionIndex) {
+      // The answer is correct
+      correctAnswers++;
+    }
+
+    setState(() {
+      if (currentQuestionIndex < widget.quizQuestions.length - 1) {
+        // Move to the next question
+        currentQuestionIndex++;
+      } else {
+        // All questions have been answered, set showSeeDetailsButton to true
+        showSeeDetailsButton = true;
+      }
+    });
+
+    // If all questions have been answered, display the "See Details" button
+    if (showSeeDetailsButton) {
+      _showResults();
+    }
+  }
+
+  void _showResults() {
+    // Display the results
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Quiz Results'),
+        content: Text(
+          'You answered $correctAnswers questions correctly out of ${widget.quizQuestions.length}.'),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              // Navigate to the InfoPage after the quiz
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => InfoPage(
+                    title: widget.title,
+                    imagePath: widget.imagePath,
+                    description: widget.description,
+                    infopagesImage: widget.infopagesImage,
+                    backgroundOpacity: widget.backgroundOpacity,
+                  ),
+                ),
+              );
+            },
+            child: Text('See Details'),
+          ),
+        ],
       ),
     );
   }
 }
+
+
+
+class Question {
+  final String questionText;
+  final List<String> options;
+  final int correctOptionIndex;
+
+  Question({
+    required this.questionText,
+    required this.options,
+    required this.correctOptionIndex,
+  });
+}
+
+class QuestionWidget extends StatelessWidget {
+  final Question question;
+  final int? selectedOptionIndex;
+  final Function(int) onOptionSelected;
+
+  QuestionWidget({
+    required this.question,
+    required this.selectedOptionIndex,
+    required this.onOptionSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          question.questionText,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 20),
+        Column(
+          children: List.generate(
+            question.options.length,
+            (index) => RadioListTile<int>(
+              title: Text(question.options[index]),
+              value: index,
+              groupValue: selectedOptionIndex,
+              onChanged: (value) {
+                onOptionSelected(value!);
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
