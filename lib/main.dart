@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'BioSeaMimi',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF124660)),
       ),
       home: IntroductionPage(),
       routes: {
@@ -51,7 +51,7 @@ class IntroductionPage extends StatelessWidget {
               SizedBox(height: 20),
               Text(
                 'Welcome to BioSeaMimi',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xffF4EBD6)),
               ),
               SizedBox(height: 20),
               ElevatedButton(
@@ -73,7 +73,7 @@ class IntroductionPage extends StatelessWidget {
               SizedBox(height: 100),
               Text(
                 'Developped by : \n YEROMONAHOS Léa & PONCET Charline \n\nResearches made by : \n SERRALHEIRO Anthéa & SOULARD Florian \n MASINSKI Yann\n\nSupported by : DISSARD Anne-Marie (<3)' ,
-                style: TextStyle(fontSize: 14, color: Colors.white),
+                style: TextStyle(fontSize: 14, color: Color(0xffF4EBD6)),
               ),
             ],
           ),
@@ -138,8 +138,8 @@ class _MapScreenState extends State<MapScreen> {
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
-      backgroundColor: Color.fromARGB(255, 15, 127, 192),
-      title: const Text('World Map'),
+      backgroundColor: Color.fromARGB(255, 164, 202, 233),
+      title: const Text('World Map', style:TextStyle(color:Color(0xFF124660))),
     ),
     body: FlutterMap(
       mapController: mapController,
@@ -320,6 +320,7 @@ class InfoPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        backgroundColor: Color(0xff709CA7),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -368,12 +369,18 @@ class InfoPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamedAndRemoveUntil(
-      context,
-      '/map', // Le nom de la route pour la carte
-      ModalRoute.withName('/map'), // La condition pour retirer toutes les routes jusqu'à '/map'
-    );
+                    context,
+                    '/map', // Le nom de la route pour la carte
+                    ModalRoute.withName('/map'), // La condition pour retirer toutes les routes jusqu'à '/map'
+                  );
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:Color.fromARGB(255, 164, 202, 233),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  textStyle: TextStyle(fontSize: 18),
+                ),
                 child: Text('Back to the map'),
+                
               ),
           ],
         ),
@@ -414,12 +421,30 @@ class _QuizPageState extends State<QuizPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mini Quiz - ${widget.title}'),
+        title: Text('Mini Quiz - ${widget.title}', style:TextStyle(color:Color(0xFF124660))),
+        backgroundColor: Color.fromARGB(255, 164, 202, 233),
       ),
+      backgroundColor: Color(0XFFB8CBD0),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 300, // Définissez la largeur maximale souhaitée ici
+                height: 150, // Définissez la hauteur maximale souhaitée ici
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Image.asset(
+                    widget.imagePath, // Utilisez la propriété imagePath de widget
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                    alignment: Alignment.center,
+                  ),
+                ),
+              ),
             QuestionWidget(
               question: widget.quizQuestions[currentQuestionIndex],
               selectedOptionIndex: _selectedOptionIndex,
@@ -429,17 +454,22 @@ class _QuizPageState extends State<QuizPage> {
                 });
               },
             ),
+            
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Logic to handle the answer
                 _handleAnswer(_selectedOptionIndex);
               },
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 164, 202, 233),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  textStyle: TextStyle(fontSize: 18),
+                ),
               child: Text('Submit Answer'),
             ),
-            
           ],
         ),
+      ),
       ),
     );
   }
@@ -469,17 +499,29 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void _showResults() {
-    // Display the results
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Quiz Results'),
-        content: Text(
-          'You answered $correctAnswers questions correctly out of ${widget.quizQuestions.length}.'),
-        actions: [
-          ElevatedButton(
+  // Afficher les résultats
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('Quiz Results'),
+          IconButton(
+            icon: Icon(Icons.close),
             onPressed: () {
-              // Navigate to the InfoPage after the quiz
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+      content: Text(
+        'You answered $correctAnswers questions correctly out of ${widget.quizQuestions.length}.'),
+      actions: [
+        Center(
+          child: ElevatedButton(
+            onPressed: () {
+              // Naviguer vers la InfoPage après le quiz
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -493,14 +535,21 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               );
             },
+            style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 164, 202, 233),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  textStyle: TextStyle(fontSize: 18),
+                ),
             child: Text('See Details'),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 }
 
+
+}
 
 
 class Question {
