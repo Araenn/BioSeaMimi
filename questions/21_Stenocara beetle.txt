@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "Where do scientists find a solution to transform humidity from the air into drinkable water ?",
+    "options": ["In the amazon", "In the Namibian desert", "In the Russian toundra", "In the forest of Europe"],
+    "correctOptionIndex": 1
+  }
+]

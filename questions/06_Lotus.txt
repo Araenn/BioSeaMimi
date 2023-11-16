@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "Like lotus leaves, rice leaves, reed leaves, rose petals, and cabbage flowers, which have superhydrophobic properties due to their microstructured surface that traps air, what insects already inspire antifouling technologies?",
+    "options": ["Butterflies", "Flies", "Cicadas", "Bees"],
+    "correctOptionIndex": 0
+  }
+]

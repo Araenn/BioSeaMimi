@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-// ignore: library_prefixes
 import 'package:latlong2/latlong.dart' as latLng;
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'map_markers.dart';
+import 'questions.dart';
 
 void main() async {
   runApp(MyApp());
@@ -83,6 +84,8 @@ class IntroductionPage extends StatelessWidget {
   }
 }
 
+String folderPath = 'images/markers_img/'; // Remplacez par le chemin de votre dossier
+List<MapMarker> mapMarkers = loadMarkersFromFiles(folderPath);
 
 
 class AppConstants {
@@ -113,9 +116,21 @@ class _MapScreenState extends State<MapScreen> {
 
   void _handleMarkerTap(int markerIndex) {
   String descriptionFilePath = mapMarkers[markerIndex].description!;
+  String questionsFilePath = mapMarkers[markerIndex].questionsFilePath;
+
   BuildContext currentContext = context;
 
-  loadDescription(descriptionFilePath).then((descriptionContent) {
+  Future.wait([
+    loadDescription(descriptionFilePath),
+    loadQuestions(questionsFilePath),
+  ]).then((List<Object?> results) {
+    String descriptionContent = results[0] as String;
+  List<Question>? quizQuestions = results[1] as List<Question>?;
+
+  if (quizQuestions != null) {
+    // Mettez à jour le champ quizQuestions pour le marqueur actuel
+    mapMarkers[markerIndex].quizQuestions = quizQuestions;
+
     Navigator.push(
       currentContext,
       MaterialPageRoute(
@@ -125,13 +140,14 @@ class _MapScreenState extends State<MapScreen> {
           description: descriptionContent,
           infopagesImage: mapMarkers[markerIndex].infopagesImage.toString().split('assets/').last,
           backgroundOpacity: mapMarkers[markerIndex].backgroundOpacity!.toDouble(),
-          quizQuestions: mapMarkers[markerIndex].quizQuestions,
-          
+          quizQuestions: quizQuestions,
         ),
       ),
     );
+    }
   });
 }
+
 
 
   @override
@@ -218,80 +234,6 @@ Widget build(BuildContext context) {
     super.dispose();
   }
 }
-
-class MapMarker {
-  final String? markerImage;
-  final String? descriptionImage;
-  final String? title;
-  final String? description;
-  final String? infopagesImage;
-  final latLng.LatLng? location;
-  final double? backgroundOpacity;
-  final List<Question> quizQuestions;
-
-  MapMarker({
-    required this.markerImage,
-    required this.descriptionImage,
-    required this.title,
-    required this.description,
-    required this.infopagesImage,
-    required this.location,
-    this.backgroundOpacity,
-    required this.quizQuestions,
-  });
-}
-
-
-final mapMarkers = [
-  MapMarker(
-    markerImage: 'assets/images/markers_img/bird.png',
-    descriptionImage: 'assets/images/description/bird.png',
-    title: 'Bird',
-    description: 'descriptions/Lotus.txt',
-    infopagesImage: 'assets/images/infopages/lotus.jpg',
-    location: latLng.LatLng(20.5090214, -0.1982948),
-    backgroundOpacity: 0.5,
-    quizQuestions: [
-      Question(
-        questionText: 'Quelle est la capitale de la France ?',
-        options: ['Paris', 'Berlin', 'Londres', 'Rome'],
-        correctOptionIndex: 0,
-      ),
-    ],
-  ),
-  MapMarker(
-    markerImage: 'assets/images/markers_img/lotus.jpg',
-    descriptionImage: 'assets/images/description/lotus.jpg',
-    title: 'Lotus',
-    description: 'descriptions/Lotus.txt',
-    infopagesImage: 'assets/images/infopages/lotus.jpg',
-    location: latLng.LatLng(50, 100),
-    backgroundOpacity: 0.5,
-    quizQuestions: [
-      Question(
-        questionText: 'Quelle est la capitale de la France ?',
-        options: ['Paris', 'Berlin', 'Londres', 'Rome'],
-        correctOptionIndex: 0,
-      ),
-    ],
-  ),
-  MapMarker(
-    markerImage: 'assets/images/markers_img/Whale.png',
-    descriptionImage: 'assets/images/description/Whale.png',
-    title: 'Whale',
-    description: 'descriptions/Whales.txt',
-    infopagesImage: 'assets/images/infopages/whale.jpg',
-    location: latLng.LatLng(50, 40),
-    backgroundOpacity: 0.5,
-    quizQuestions: [
-      Question(
-        questionText: 'Quelle est la capitale de la France ?',
-        options: ['Paris', 'Berlin', 'Londres', 'Rome'],
-        correctOptionIndex: 0,
-      ),
-    ],
-  ),
-];
 
 String readDescriptionsFromFileSync(String filePath) {
   File file = File(filePath);
@@ -547,22 +489,10 @@ class _QuizPageState extends State<QuizPage> {
     ),
   );
 }
-
-
 }
 
 
-class Question {
-  final String questionText;
-  final List<String> options;
-  final int correctOptionIndex;
 
-  Question({
-    required this.questionText,
-    required this.options,
-    required this.correctOptionIndex,
-  });
-}
 
 class QuestionWidget extends StatelessWidget {
   final Question question;

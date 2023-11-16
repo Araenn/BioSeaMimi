@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "How were engineers able to reduce by 30% the energy needed to mix tanks of liquid?",
+    "options": ["By observing plants", "By observing shells", "By observing animals", "Every single precedents answers"],
+    "correctOptionIndex": 3
+  }
+]

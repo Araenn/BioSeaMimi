@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "What invention inspired by the transparent and self-cleaning wings of the Greta oto butterfly has improved the production of solar energy?",
+    "options": ["A coating for solar panels that limits reflected rays", "A shape of panels that captures more rays", "A color of solar panels more sensitive to UV", "All of the above"],
+    "correctOptionIndex": 0
+  }
+]

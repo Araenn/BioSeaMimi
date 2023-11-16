@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "How can we reduce the use of pesticides with more sustainable solutions ?",
+    "options": ["Use pheromones of certain organism to control the quality of the soils", "New type of chemical coming from insect", "Introduction of a predator bacteria"],
+    "correctOptionIndex": 0
+  }
+]
