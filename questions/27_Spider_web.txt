@@ -1,7 +1,0 @@
-[
-  {
-    "questionText": "How many birds are killed due to collisions with glass windows in Canada ?",
-    "options": ["70000 per year", "70000 per week", "70000 per day", "70000 per half day"],
-    "correctOptionIndex": 2
-  }
-]

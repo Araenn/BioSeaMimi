@@ -1,7 +1,0 @@
-[
-  {
-    "questionText": "In addition to the shape of samaras, which species is the accessory for the PowerCone wind turbine from Biome Renewables inspired by to improve the air distribution towards the blades?",
-    "options": ["The seagull", "The polar bear", "The grasshopper", "The kingfisher"],
-    "correctOptionIndex": 3
-  }
-]

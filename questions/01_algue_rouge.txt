@@ -1,7 +1,0 @@
-[
-  {
-    "questionText": "Quelle est la capitale de la France ?",
-    "options": ["Berlin", "Paris", "Londres"],
-    "correctOptionIndex": 1
-  }
-]

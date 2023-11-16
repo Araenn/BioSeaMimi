@@ -1,7 +1,0 @@
-[
-  {
-    "questionText": "From which tree did the engineer-researchers at the University of Virginia draw inspiration to invent lightweight and deformable SUMR offshore wind turbine rotors capable of withstanding strong winds?",
-    "options": ["Oak", "Coconut tree", "Olive tree", "Fir tree"],
-    "correctOptionIndex": 1
-  }
-]

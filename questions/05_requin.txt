@@ -1,7 +1,0 @@
-[
-  {
-    "questionText": "For what application did researchers at the University of Florida develop a non-polluting coating inspired by shark skin?",
-    "options": ["Antifouling strategy", "Waterproofing for raincoats", "Biodegradable plastic packaging"],
-    "correctOptionIndex": 0
-  }
-]

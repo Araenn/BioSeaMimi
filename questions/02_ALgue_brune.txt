@@ -1,7 +1,0 @@
-[
-  {
-    "questionText": "Which type of algaes inspires bio-antifouling strategies due to its structure with antimicrobial, anti-algal, and anti-larval properties ?",
-    "options": ["Red and brown algaes", "All marine algaes", "Green algaes", "None"],
-    "correctOptionIndex": 1
-  }
-]

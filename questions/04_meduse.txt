@@ -1,7 +1,0 @@
-[
-  {
-    "questionText": "What do electronic and computer components, paints, sunscreens and cosmetics, contrast agents for medical imaging, and medications have in common?",
-    "options": ["They contain nanoparticles that persist in the environment and are passed down from generation to generation in animal species.", "They are all non-recyclable.", "Their use is highly polluting: release of volatile organic compounds, significant energy consumption, etc."],
-    "correctOptionIndex": 0
-  }
-]

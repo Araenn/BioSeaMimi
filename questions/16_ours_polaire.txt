@@ -1,7 +1,0 @@
-[
-  {
-    "questionText": "For what application did the University of Science and Technology of China develop the bio-inspired Carbon Tube Aerogel based on the structure of polar bear hairs ?",
-    "options": ["Soft fabrics", "Thermal insulation", "Waterproof material", "As a replacement for artificial turf"],
-    "correctOptionIndex": 1
-  }
-]

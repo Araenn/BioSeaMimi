@@ -1,7 +1,0 @@
-[
-  {
-    "questionText": "How to improve the placement of wind turbines to improve their performance ?",
-    "options": ["Space them as much as possible", "Place them In battery like tree farm", "Position them as a school of fish"],
-    "correctOptionIndex": 2
-  }
-]

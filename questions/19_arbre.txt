@@ -1,7 +1,0 @@
-[
-  {
-    "questionText": "What is the common point between a human toilet and tree ?",
-    "options": ["Use of tree evaporation to disperse water", "Use of antibacterial envelope", "Big network under them to collect from the ground"],
-    "correctOptionIndex": 0
-  }
-]

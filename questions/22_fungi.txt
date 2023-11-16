@@ -1,7 +1,0 @@
-[
-  {
-    "questionText": "In construction, heat insulation is a major part of reducing energy consumption. What is an isolation panel outperforming traditional insulation materials made from ?",
-    "options": ["Wood", "Mycelium", "Glass wool"],
-    "correctOptionIndex": 1
-  }
-]
