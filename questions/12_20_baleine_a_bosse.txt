@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "What is better to diminish drag or enhance lift in a wind turbine ?",
+    "options": ["Smooth and even as a dolphin", "Rough and uneven as a humpback"],
+    "correctOptionIndex": 1
+  }
+]

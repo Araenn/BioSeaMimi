@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "The future of biodegradable plastic will come from what ?",
+    "options": ["The mind of a great scientist", "The ocean", "Deep inside of the amazon"],
+    "correctOptionIndex": 1
+  }
+]

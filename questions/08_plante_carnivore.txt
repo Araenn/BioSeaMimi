@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "Extremely slippery nano-ridged antifouling coatings are inspired by super-hydrophilic and microstructured surfaces that trap a thin layer of water on which insects slide and eventually fall into the digestive part of the species. Where are these surfaces found?",
+    "options": ["In the throat of certain birds", "On the tongue of frogs", "On the neck of the digestive urn of carnivorous plants Nepenthes"],
+    "correctOptionIndex": 2
+  }
+]

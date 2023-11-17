@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "What widely used system does the French company Eel Energy replace by drawing inspiration from the movements of fish tails?",
+    "options": ["Hydro-turbine propellers", "Wind turbine blades", "Swimming pool cleaning robot"],
+    "correctOptionIndex": 0
+  }
+]

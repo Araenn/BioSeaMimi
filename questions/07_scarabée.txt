@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "What feature of the desert beetle inspires the mist net?",
+    "options": ["Special elytra that capture atmospheric moisture.", "Diet based on air humidity.", "Ability to store large quantities of water in its body", "Habit of seeking water in dry environments."],
+    "correctOptionIndex": 0
+  }
+]

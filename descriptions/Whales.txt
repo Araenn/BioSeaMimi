@@ -1,5 +1,0 @@
-Inspired by the "bumpy" fins of humpback whales, the team led by Frank Fish, Stephen Dewar, and Philip Watts has developed turbine blades with three-dimensional bumps on their leading edges. 
-
-These bumps alter the airflow, significantly enhancing aerodynamic performance and reducing noise in wind turbines. 
-
-This biomimetic approach draws from nature to improve the efficiency and acoustics of wind energy technology.

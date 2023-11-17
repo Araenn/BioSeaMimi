@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "How a tardigrade is able to revolutionize medicine ?",
+    "options": ["Discovery of the secret of non-aging", "Anti-radiation medicine", "Disposal of toxic waste", "Long terme storage of vaccin"],
+    "correctOptionIndex": 3
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "In Montpelier, a hybrid technological approach has been developed to desalt three times more seawater consuming 12% less electricity for each treated cubic meter. What inspired this technology ?",
+    "options": ["Natural filter made of volcanic stones", "Naturally antibacterial and hypoallergenic flax fabric", "Cell membranes which are permeable to water molecules while rejecting ions"],
+    "correctOptionIndex": 2
+  }
+]

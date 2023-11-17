@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "What did PAX Scientific decide to market, inspired by the shape of tornadoes and swirls?",
+    "options": ["Less energy-consuming fans", "More attractive decorative coils", "More resistant plumbing conduits"],
+    "correctOptionIndex": 0
+  }
+]

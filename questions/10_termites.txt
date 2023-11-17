@@ -1,0 +1,7 @@
+[
+  {
+    "questionText": "Researchers at Lund University have invented a system inspired by termite mounds that is used to reduce building consumption, like the Eastgate building, which requires only 10% of the energy consumed by a conventional building. What is it?",
+    "options": ["Staircase and corridor system", "Water circulation system", "Air conditioning system"],
+    "correctOptionIndex": 2
+  }
+]
