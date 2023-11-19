@@ -2,7 +2,7 @@
     <application
         android:label="BioSeaMimi"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/logo2cut">
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -39,46 +39,63 @@ class IntroductionPage extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                width: 100,
-                height: 100,
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Welcome to BioSeaMimi',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xffF4EBD6)),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MapScreen(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 164, 202, 233),
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  textStyle: TextStyle(fontSize: 18),
+        child: Stack(
+          children: [
+            Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 20),
+                Image.asset(
+                  'images/logo/logo2cut.png',
+                  width: 250,
+                  height: 200,
                 ),
-                child: Text('Go see the map !'),
-              ),
-              SizedBox(height: 100),
-              Text(
-                'Developped by : \n YEROMONAHOS Léa & PONCET Charline \n\nResearches made by : \n SERRALHEIRO Anthéa & SOULARD Florian \n MASINSKI Yann\n\nSupported by : DISSARD Anne-Marie (<3)' ,
-                style: TextStyle(fontSize: 14, color: Color(0xffF4EBD6)),
-              ),
-            ],
+                SizedBox(height: 40),
+                Text(
+                  'Welcome to BioSeaMimi',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xffF4EBD6)),
+                ),
+                SizedBox(height: 70),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MapScreen(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 164, 202, 233),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    textStyle: TextStyle(fontSize: 18),
+                  ),
+                  child: Text('Go to the map !'),
+                ),
+                SizedBox(height: 100),
+                Text(
+                  'Developped by : \n YEROMONAHOS Léa & PONCET Charline \n\nResearch made by : \n SERRALHEIRO Anthéa & SOULARD Florian \n MASINSKI Yann\n\nSupported by : DISSARD Anne-Marie (<3)' ,
+                  style: TextStyle(fontSize: 14, color: Color(0xffF4EBD6)),
+                ),
+              ],
+            ),
           ),
+          Positioned(
+              left: 16.0, // Ajustez la position horizontale selon vos besoins
+              bottom: 16.0, // Ajustez la position verticale selon vos besoins
+              child: Image.asset(
+                'images/introduction/seatech-208.png',
+                width: 50, // Ajustez la largeur selon vos besoins
+                height: 50, // Ajustez la hauteur selon vos besoins
+              ),
+            ),
+          ]
+          
         ),
+        
       ),
+      
     );
   }
 }
@@ -553,8 +570,8 @@ class QuestionWidget extends StatelessWidget {
 final mapMarkers = [
   MapMarker(
     markerImage: 'assets/images/markers_img/01_algue_rouge.png',
-    descriptionImage: 'assets/images/description/01_algue_rouge.png',
-    title: 'Algue Rouge',
+    descriptionImage: 'assets/images/description/01_algue_rouge.jpg',
+    title: 'Red Algae',
     description: 'descriptions/01_algue_rouge.txt',
     infopagesImage: 'assets/images/infopages/01_algue_rouge.png',
     location: latLng.LatLng(-20.7890, 57.5522),
@@ -569,8 +586,8 @@ final mapMarkers = [
   ),
   MapMarker(
     markerImage: 'assets/images/markers_img/02_Algue_brune.png',
-    descriptionImage: 'assets/images/description/02_Algue_brune.png',
-    title: 'Algue Brune',
+    descriptionImage: 'assets/images/description/02_Algue_brune.jpg',
+    title: 'Brown Algae',
     description: 'descriptions/02_Algue_brune.txt',
     infopagesImage: 'assets/images/infopages/02_Algue_brune.png',
     location: latLng.LatLng(-30.7890, -175.9012),
@@ -585,8 +602,8 @@ final mapMarkers = [
   ),
   MapMarker(
   markerImage: 'assets/images/markers_img/03_Membrane_cellulaire.png',
-  descriptionImage: 'assets/images/description/03_Membrane_cellulaire.png',
-  title: 'Membrane Cellulaire',
+  descriptionImage: 'assets/images/description/03_Membrane_cellulaire.jpg',
+  title: 'Cell Membrane',
   description: 'descriptions/03_Membrane_cellulaire.txt',
   infopagesImage: 'assets/images/infopages/03_Membrane_cellulaire.png',
   location: latLng.LatLng(53.4567, -179.6789),
@@ -603,8 +620,8 @@ final mapMarkers = [
 
 MapMarker(
   markerImage: 'assets/images/markers_img/04_meduse.png',
-  descriptionImage: 'assets/images/description/04_meduse.png',
-  title: 'Méduse',
+  descriptionImage: 'assets/images/description/04_meduse.jpg',
+  title: 'Jellyfish',
   description: 'descriptions/04_meduse.txt',
   infopagesImage: 'assets/images/infopages/04_meduse.png',
   location: latLng.LatLng(25.7890, 165.6789),
@@ -621,8 +638,8 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/05_requin.png',
-  descriptionImage: 'assets/images/description/05_requin.png',
-  title: 'Requin',
+  descriptionImage: 'assets/images/description/05_requin.jpg',
+  title: 'Shark',
   description: 'descriptions/05_requin.txt',
   infopagesImage: 'assets/images/infopages/05_requin.png',
   location: latLng.LatLng(30.6892, -41.0445),
@@ -639,7 +656,7 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/06_Lotus.png',
-  descriptionImage: 'assets/images/description/06_Lotus.png',
+  descriptionImage: 'assets/images/description/06_Lotus.jpg',
   title: 'Lotus',
   description: 'descriptions/06_Lotus.txt',
   infopagesImage: 'assets/images/infopages/06_Lotus.png',
@@ -656,11 +673,11 @@ MapMarker(
 ),
 
 MapMarker(
-  markerImage: 'assets/images/markers_img/07_scarabée.png',
-  descriptionImage: 'assets/images/description/07_scarabée.png',
-  title: 'Scarabée',
-  description: 'descriptions/07_scarabée.txt',
-  infopagesImage: 'assets/images/infopages/07_scarabée.png',
+  markerImage: 'assets/images/markers_img/07_scarabee.png',
+  descriptionImage: 'assets/images/description/07_scarabee.jpg',
+  title: 'Beetle',
+  description: 'descriptions/07_scarabee.txt',
+  infopagesImage: 'assets/images/infopages/07_scarabee.png',
   location: latLng.LatLng(27.6891, 24.3319),
   backgroundOpacity: 0.5,
   quizQuestions: [
@@ -675,8 +692,8 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/08_plante_carnivore.png',
-  descriptionImage: 'assets/images/description/08_plante_carnivore.png',
-  title: 'Plante Carnivore',
+  descriptionImage: 'assets/images/description/08_plante_carnivore.jpg',
+  title: 'Carnivorous Plant',
   description: 'descriptions/08_plante_carnivore.txt',
   infopagesImage: 'assets/images/infopages/08_plante_carnivore.png',
   location: latLng.LatLng(0.7893, 113.9213),
@@ -693,8 +710,8 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/09_Poisson.png',
-  descriptionImage: 'assets/images/description/09_Poisson.png',
-  title: 'Poisson',
+  descriptionImage: 'assets/images/description/09_Poisson.jpg',
+  title: 'Fish',
   description: 'descriptions/09_Poisson.txt',
   infopagesImage: 'assets/images/infopages/09_Poisson.png',
   location: latLng.LatLng(75.1234, -0.5678),
@@ -711,7 +728,7 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/10_termites.png',
-  descriptionImage: 'assets/images/description/10_termites.png',
+  descriptionImage: 'assets/images/description/10_termites.jpg',
   title: 'Termites',
   description: 'descriptions/10_termites.txt',
   infopagesImage: 'assets/images/infopages/10_termites.png',
@@ -729,11 +746,11 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/12_20_baleine_a_bosse.png',
-  descriptionImage: 'assets/images/description/12_20_baleine_a_bosse.png',
-  title: 'Baleine à Bosse',
+  descriptionImage: 'assets/images/description/12_20_baleine_a_bosse.jpeg',
+  title: 'Humpback Whale',
   description: 'descriptions/12_20_baleine_a_bosse.txt',
   infopagesImage: 'assets/images/infopages/12_20_baleine_a_bosse.png',
-  location: latLng.LatLng(64.7890, -124.5678),
+  location: latLng.LatLng(20.6891, -156.3319),
   backgroundOpacity: 0.5,
   quizQuestions: [
     Question(
@@ -746,11 +763,11 @@ MapMarker(
 ),
 MapMarker(
   markerImage: 'assets/images/markers_img/13_Martin_pecheur.png',
-  descriptionImage: 'assets/images/description/13_Martin_pecheur.png',
-  title: 'Martin Pêcheur',
+  descriptionImage: 'assets/images/description/13_Martin_pecheur.jpg',
+  title: 'Kingfisher',
   description: 'descriptions/13_Martin_pecheur.txt',
   infopagesImage: 'assets/images/infopages/13_Martin_pecheur.png',
-  location: latLng.LatLng(20.6891, -156.3319),
+  location: latLng.LatLng(64.7890, -124.5678),
   backgroundOpacity: 0.5,
   quizQuestions: [
     Question(
@@ -764,8 +781,8 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/14_Papillon_greta_oto.png',
-  descriptionImage: 'assets/images/description/14_Papillon_greta_oto.png',
-  title: 'Papillon Greta Oto',
+  descriptionImage: 'assets/images/description/14_Papillon_greta_oto.jpg',
+  title: 'Greta Oto Butterfly',
   description: 'descriptions/14_Papillon_greta_oto.txt',
   infopagesImage: 'assets/images/infopages/14_Papillon_greta_oto.png',
   location: latLng.LatLng(16.6895, -97.1234),
@@ -782,8 +799,8 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/15_tornade.png',
-  descriptionImage: 'assets/images/description/15_tornade.png',
-  title: 'Tornade',
+  descriptionImage: 'assets/images/description/15_tornade.jpeg',
+  title: 'Tornado',
   description: 'descriptions/15_tornade.txt',
   infopagesImage: 'assets/images/infopages/15_tornade.png',
   location: latLng.LatLng(50.2232, -100.6267),
@@ -800,8 +817,8 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/16_ours_polaire.png',
-  descriptionImage: 'assets/images/description/16_ours_polaire.png',
-  title: 'Ours Polaire',
+  descriptionImage: 'assets/images/description/16_ours_polaire.jpg',
+  title: 'Polar Beer',
   description: 'descriptions/16_ours_polaire.txt',
   infopagesImage: 'assets/images/infopages/16_ours_polaire.png',
   location: latLng.LatLng(80.7893, -45.9213),
@@ -818,8 +835,8 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/17_cocotier.png',
-  descriptionImage: 'assets/images/description/17_cocotier.png',
-  title: 'Cocotier',
+  descriptionImage: 'assets/images/description/17_cocotier.jpeg',
+  title: 'Coconut Tree',
   description: 'descriptions/17_cocotier.txt',
   infopagesImage: 'assets/images/infopages/17_cocotier.png',
   location: latLng.LatLng(30.3456, -75.5678),
@@ -836,7 +853,7 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/18_Blob.png',
-  descriptionImage: 'assets/images/description/18_Blob.png',
+  descriptionImage: 'assets/images/description/18_Blob.jpg',
   title: 'Blob',
   description: 'descriptions/18_Blob.txt',
   infopagesImage: 'assets/images/infopages/18_Blob.png',
@@ -854,8 +871,8 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/19_arbre.png',
-  descriptionImage: 'assets/images/description/19_arbre.png',
-  title: 'Arbre',
+  descriptionImage: 'assets/images/description/19_arbre.jpeg',
+  title: 'Tree',
   description: 'descriptions/19_arbre.txt',
   infopagesImage: 'assets/images/infopages/19_arbre.png',
   location: latLng.LatLng(-15.1234, -60.5678),
@@ -872,7 +889,7 @@ MapMarker(
 
 MapMarker(
   markerImage: 'assets/images/markers_img/20_Tardigrade.png',
-  descriptionImage: 'assets/images/description/20_Tardigrade.png',
+  descriptionImage: 'assets/images/description/20_Tardigrade.jpg',
   title: 'Tardigrade',
   description: 'descriptions/20_Tardigrade.txt',
   infopagesImage: 'assets/images/infopages/20_Tardigrade.png',
@@ -889,11 +906,11 @@ MapMarker(
 ),
 
 MapMarker(
-  markerImage: 'assets/images/markers_img/21_Stenocara beetle.png',
-  descriptionImage: 'assets/images/description/21_Stenocara beetle.png',
+  markerImage: 'assets/images/markers_img/21_Stenocara_beetle.png',
+  descriptionImage: 'assets/images/description/21_Stenocara_beetle.jpg',
   title: 'Stenocara Beetle',
-  description: 'descriptions/21_Stenocara beetle.txt',
-  infopagesImage: 'assets/images/infopages/21_Stenocara beetle.png',
+  description: 'descriptions/21_Stenocara_beetle.txt',
+  infopagesImage: 'assets/images/infopages/21_Stenocara_beetle.png',
   location: latLng.LatLng(-6.4321, 22.1234),
   backgroundOpacity: 0.5,
   quizQuestions: [
@@ -907,7 +924,7 @@ MapMarker(
 ),
 MapMarker(
   markerImage: 'assets/images/markers_img/22_fungi.png',
-  descriptionImage: 'assets/images/description/22_fungi.png',
+  descriptionImage: 'assets/images/description/22_fungi.jpg',
   title: 'Fungi',
   description: 'descriptions/22_fungi.txt',
   infopagesImage: 'assets/images/infopages/22_fungi.png',
@@ -924,7 +941,7 @@ MapMarker(
 ),
 MapMarker(
   markerImage: 'assets/images/markers_img/23_bacillus_bacterium.png',
-  descriptionImage: 'assets/images/description/23_bacillus_bacterium.png',
+  descriptionImage: 'assets/images/description/23_bacillus_bacterium.jpg',
   title: 'Bacillus Bacterium',
   description: 'descriptions/23_bacillus_bacterium.txt',
   infopagesImage: 'assets/images/infopages/23_bacillus_bacterium.png',
@@ -941,7 +958,7 @@ MapMarker(
 ),
 MapMarker(
   markerImage: 'assets/images/markers_img/24_mussels.png',
-  descriptionImage: 'assets/images/description/24_mussels.png',
+  descriptionImage: 'assets/images/description/24_mussels.jpg',
   title: 'Mussels',
   description: 'descriptions/24_mussels.txt',
   infopagesImage: 'assets/images/infopages/24_mussels.png',
@@ -958,7 +975,7 @@ MapMarker(
 ),
 MapMarker(
   markerImage: 'assets/images/markers_img/25_coral.png',
-  descriptionImage: 'assets/images/description/25_coral.png',
+  descriptionImage: 'assets/images/description/25_coral.jpg',
   title: 'Coral',
   description: 'descriptions/25_coral.txt',
   infopagesImage: 'assets/images/infopages/25_coral.png',
@@ -974,11 +991,11 @@ MapMarker(
   ],
 ),
 MapMarker(
-  markerImage: 'assets/images/markers_img/26_School of fish.png',
-  descriptionImage: 'assets/images/description/26_School of fish.png',
+  markerImage: 'assets/images/markers_img/26_School_of_fish.png',
+  descriptionImage: 'assets/images/description/26_School_of_fish.jpeg',
   title: 'School of Fish',
   description: 'descriptions/26_School_of_fish.txt',
-  infopagesImage: 'assets/images/infopages/26_School of fish.png',
+  infopagesImage: 'assets/images/infopages/26_School_of_fish.png',
   location: latLng.LatLng(82.4567, 143.6789),
   backgroundOpacity: 0.5,
   quizQuestions: [
@@ -992,7 +1009,7 @@ MapMarker(
 ),
 MapMarker(
   markerImage: 'assets/images/markers_img/27_Spider_web.png',
-  descriptionImage: 'assets/images/description/27_Spider_web.png',
+  descriptionImage: 'assets/images/description/27_Spider_web.jpeg',
   title: 'Spider Web',
   description: 'descriptions/27_Spider_web.txt',
   infopagesImage: 'assets/images/infopages/27_Spider_web.png',
@@ -1009,7 +1026,7 @@ MapMarker(
 ),
 MapMarker(
   markerImage: 'assets/images/markers_img/28_nematode.png',
-  descriptionImage: 'assets/images/description/28_nematode.png',
+  descriptionImage: 'assets/images/description/28_nematode.jpeg',
   title: 'Nematode',
   description: 'descriptions/28_nematode.txt',
   infopagesImage: 'assets/images/infopages/28_nematode.png',
@@ -1026,7 +1043,7 @@ MapMarker(
 ),
 MapMarker(
   markerImage: 'assets/images/markers_img/29_marine_microorganisms.png',
-  descriptionImage: 'assets/images/description/29_marine_microorganisms.png',
+  descriptionImage: 'assets/images/description/29_marine_microorganisms.jpg',
   title: 'Marine Microorganisms',
   description: 'descriptions/29_marine_microorganisms.txt',
   infopagesImage: 'assets/images/infopages/29_marine_microorganisms.png',
@@ -1043,7 +1060,7 @@ MapMarker(
 ),
 MapMarker(
   markerImage: 'assets/images/markers_img/30_Pax_Lily.png',
-  descriptionImage: 'assets/images/description/30_Pax_Lily.png',
+  descriptionImage: 'assets/images/description/30_Pax_Lily.jpg',
   title: 'Pax Lily',
   description: 'descriptions/30_Pax_Lily.txt',
   infopagesImage: 'assets/images/infopages/30_Pax_Lily.png',

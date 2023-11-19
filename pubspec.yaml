@@ -28,9 +28,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-      - map_style.json
       - images/description/
       - images/markers_img/
       - images/introduction/
       - images/infopages/
+      - images/logo/
       - descriptions/
